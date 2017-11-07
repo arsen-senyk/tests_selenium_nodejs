@@ -1,10 +1,18 @@
+
+
 const until = require("selenium-webdriver/lib/until");
+const assert = require("assert");
 const Key = require('selenium-webdriver').Key;
 const By = require('selenium-webdriver').By;
 
 
 const need_to_be_done = By.xpath("//div[@id='action-new-form-input'][@placeholder='What needs to be done?']");
 export const test_action = By.xpath("//div[@class='action-item-input force-wrap needsclick  move ']");
+export const test_action2 = By.xpath("//div[@class='action-item-input force-wrap needsclick  move '][text()='action 2']");
+export const Test_Action2 = By.xpath("//div[@class='action-item-input force-wrap needsclick  move '][text()='Test Action 2']");
+export const test_action3 = By.xpath("//div[@class='action-item-input force-wrap needsclick  move '][text()='action 3']");
+
+export const test_action_empty = By.xpath("//div[@class='action-item-input force-wrap needsclick  move '][text()='']");
 const drop_down_label = By.xpath("//div[@class='select toggles']//div[@class='dropdown label-picker']");
 const urgent = By.xpath("//div[@class='urgent-icon-action additional-toggle urgent']");
 const urgent_enabled = By.xpath("//div[@class='urgent-icon-action additional-toggle urgent enabled']");
@@ -117,6 +125,17 @@ class Main_Page {
 
     }
 
+    get_text_from_element_and_assert_to_string(locator, str) {
+
+        const action2Element =  this._driver.findElement(locator);
+
+        var textPromise = action2Element.getText();
+
+        textPromise.then(text => {
+            assert.equal(text, str)
+        });
+    }
+
 
     new_action(name) {
 
@@ -163,6 +182,7 @@ class Main_Page {
 
     change_private_status() {
 
+        this._driver.wait(until.elementLocated(test_action), 10000);
         this.wait_for_visibility(test_action);
         this._driver.findElement(test_action).click();
 
@@ -175,6 +195,34 @@ class Main_Page {
         this.wait_for_visibility(private_icon_unchecked);
         this._driver.findElement(private_icon_unchecked).isDisplayed();
 
+    }
+
+    change_action_title_press_enter(new_title) {
+
+        this._driver.wait(until.elementLocated(test_action), 10000);
+        this.wait_for_visibility(test_action);
+        this._driver.findElement(test_action).click();
+        this._driver.sleep(500);
+        this._driver.wait(until.elementLocated(action_title), 10000);
+        this.wait_for_visibility(action_title);
+        this._driver.findElement(action_title).clear();
+        this._driver.findElement(action_title).sendKeys(new_title + Key.ENTER);
+
+    }
+
+    change_action_title_press_close(new_title) {
+
+
+        this._driver.wait(until.elementLocated(Test_Action2), 10000);
+        this.wait_for_visibility(Test_Action2);
+        this._driver.findElement(Test_Action2).click();
+
+        this._driver.sleep(500);
+        this._driver.wait(until.elementLocated(action_title), 10000);
+        this.wait_for_visibility(action_title);
+        this._driver.findElement(action_title).clear();
+        this._driver.findElement(action_title).sendKeys(new_title);
+        this._driver.findElement(close_buton).click();
     }
 }
 

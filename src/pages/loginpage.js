@@ -36,10 +36,13 @@ class LoginPage {
     enter_text_by_char(elem, str) {
 
         var i;
+        this._driver.findElement(elem).click();
+        this._driver.sleep(200);
         const A = str.split("");
         for (i = 0; i < A.length; i ++) {
             this._driver.findElement(elem).sendKeys(A[i]);
         }
+        this._driver.sleep(300);
 
     }
 
@@ -108,7 +111,7 @@ class LoginPage {
 }
 
 
-LoginPage.login = "test3@mail.com";
+LoginPage.login = "test9@mail.com";
 LoginPage.password = "123456";
 
 module.exports = LoginPage;
